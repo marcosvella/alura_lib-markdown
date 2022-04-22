@@ -1,5 +1,5 @@
-import chalk from "chalk";
-import { readFileSync } from "fs";
+const chalk = require("chalk");
+const fs = require("fs");
 
 function extraiLinks(texto) {
   const regex = /\[([^\]]*)\]\((https?:\/\/[^$#\s].[^\s]*)\)/gm;
@@ -10,7 +10,7 @@ function extraiLinks(texto) {
     arrayResultado.push({ [temp[1]]: temp[2] });
   }
 
-  console.log(arrayResultado);
+  return arrayResultado.length == 0 ? "Não há links" : arrayResultado;
 }
 
 function trataErro(erro) {
@@ -20,11 +20,11 @@ function trataErro(erro) {
 function pegaArquivo(caminhoDoArquivo) {
   try {
     const encoding = "utf-8";
-    let texto = readFileSync(caminhoDoArquivo, encoding).toString();
-    extraiLinks(texto);
+    let texto = fs.readFileSync(caminhoDoArquivo, encoding).toString();
+    return extraiLinks(texto);
   } catch (err) {
     trataErro(err);
   }
 }
 
-pegaArquivo("./arquivos/texto1.md");
+module.exports = pegaArquivo;
